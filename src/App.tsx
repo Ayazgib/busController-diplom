@@ -18,7 +18,7 @@ function App() {
   return (
       <Provider store={store} >
           <Router>
-              {/*<Header />*/}
+              <Header />
               <Main />
            </Router>
       </Provider>

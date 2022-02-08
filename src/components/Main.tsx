@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import { PagesLink } from '../common/models';
 import Auth from "./Authorization";
+import Schedule from "./Schedule";
 
 
 function Main(props: any) {
@@ -15,11 +16,15 @@ function Main(props: any) {
 
 
     return (
-        <main className='container'>
-            <Routes>
-                <Route path={PagesLink.auth} element={<Auth />} />
-            </Routes>
-        </main>
+        <div className='app_wrap'>
+            <main className='container'>
+                <Routes>
+                    <Route path={PagesLink.auth} element={<Auth />} />
+                    <Route path={PagesLink.schedule} element={<Schedule />} />
+                </Routes>
+            </main>
+        </div>
+
 
     );
 }

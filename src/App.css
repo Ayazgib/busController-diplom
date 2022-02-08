@@ -1,5 +1,11 @@
 body {
   position: relative;
+  background-color: #bbb9b9 !important;
+}
+.app_container {
+  display: block;
+  margin:  0 auto;
+  width: 1100px;
 }
 .app__logo-small {
   width: 125px;
@@ -8,4 +14,48 @@ body {
 .app__logo_medium {
   width: 145px;
   height: 50px;
+}
+.app__select {
+  border: 1px solid #bbb9b9;
+  border-radius: 5px;
+  transition: .4s;
+  padding: .5em 1em;
+}
+.app__select:hover {
+  border: 1px solid #6123F0;
+  filter: drop-shadow(0px 1.2px 5px #6123F0);
+}
+.app_table {
+  text-align: center;
+  border-collapse: collapse;
+  background-color: white;
+}
+.app_table th {
+  background-color: #CEBBFB;
+  font-weight: bolder;
+  border: 1.7px solid #6123F0;
+  padding: 8px 8px;
+}
+
+.app_table tr td {
+  border: 1.7px solid #6123F0;
+}
+.app_table td {
+  padding: 5px 8px;
+}
+.app__load_more {
+  padding: 4px 25px;
+  background-color: #CEBBFB;
+  color: #6123F0;
+  border-radius: 5px ;
+  font-weight: 500;
+  font-size: 1.2em;
+  transition: .44s;
+  border: 2.5px solid #CEBBFB;
+  margin-top: 25px;
+
+}
+.app__load_more:hover {
+  border: 2.5px solid #fff;
+  color: #fff;
 }
