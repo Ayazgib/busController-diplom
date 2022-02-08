@@ -1,0 +1,11 @@
+body {
+  position: relative;
+}
+.app__logo-small {
+  width: 125px;
+  height: 40px;
+}
+.app__logo_medium {
+  width: 145px;
+  height: 50px;
+}
