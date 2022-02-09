@@ -1,0 +1,13 @@
+.workhour__cell {
+    display: flex;
+    column-gap: 40px;
+}
+.long  {
+    backgroundColor: 'red',
+}
+.short {
+    backgroundColor:  'yellow',
+}
+.bigBus {
+    backgroundColor: 'green',
+}

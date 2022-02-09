@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from "react-redux";
 import { PagesLink } from '../common/models';
 import Auth from "./Authorization";
 import Schedule from "./Schedule";
+import Timesheet from "./Timesheet";
+import TEST from "./TEST";
 
 
 function Main(props: any) {
@@ -21,6 +23,7 @@ function Main(props: any) {
                 <Routes>
                     <Route path={PagesLink.auth} element={<Auth />} />
                     <Route path={PagesLink.schedule} element={<Schedule />} />
+                    <Route path={PagesLink.timesheet} element={<Timesheet />} />
                 </Routes>
             </main>
         </div>

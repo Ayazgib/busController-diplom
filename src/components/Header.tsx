@@ -11,13 +11,13 @@ function Header() {
             <nav className='header__nav'>
                 <NavLink to={PagesLink.schedule} >
                     РАСПИСАНИЕ
-                </NavLink> /
+                </NavLink> <b style={{color: '#CEBBFB'}}>/</b>
                 <NavLink to={PagesLink.timesheet} >
                     ГРАФИК
-                </NavLink> /
+                </NavLink> <b style={{color: '#CEBBFB'}}>/</b>
                 <NavLink to={PagesLink.request} >
                     ЗАЯВКИ
-                </NavLink> /
+                </NavLink> <b style={{color: '#CEBBFB'}}>/</b>
                 <NavLink to={PagesLink.docs} className='header__nav-last-child'>
                     ОТЧЕТЫ
                 </NavLink>

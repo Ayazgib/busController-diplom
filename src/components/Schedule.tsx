@@ -7,7 +7,6 @@ import SceletonTable from "./SceletonTable";
 
 
 function Schedule(props: any) {
-    const state = useSelector((state:any) => state);
     const [longTable, setLongTable] = useState(true);
     const [isLoad, setIsLoad] = useState(false);
     const [loadRowCount, setLoadRowCount] = useState(5);
