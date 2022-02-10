@@ -5,7 +5,17 @@ import '../reset.css'
 import '../styles/timeSheets.css'
 import SceletonTable from "./SceletonTable";
 import {racesTypes, workHours} from "../common/models";
-import {Button, Dialog, DialogActions, DialogContent, Tooltip, Typography} from "@mui/material";
+import {
+    Autocomplete,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    FormControl,
+    InputLabel, MenuItem, Select, TextField,
+    Tooltip,
+    Typography
+} from "@mui/material";
 import {makeStyles} from '@mui/styles';
 import { styled } from '@mui/material/styles';
 
@@ -44,7 +54,9 @@ function TimeSheet(props: any) {
     const [loadCellCount, setLoadCellCount] = useState(7);
     const [openTrip, setOpenTrip] =  useState<any>();
     const [isOpenDialog, setIsOpenDialog] = useState<any>(false);
-
+    const [currentDriver, setCurrentDriver] = useState<any>();
+    const [filteredDrivers, setFilteredDrivers] = useState<any>(testDrivers)
+    const [filteredHours, setFilteredHours] = useState<any>(workHours);
 
     useEffect(() => {
         setTimeout(() => {
@@ -68,18 +80,68 @@ function TimeSheet(props: any) {
     }
 
     const handleClose = () => {
+        //TODO add save race
         setIsOpenDialog(false);
     };
+
+    const handleFilterDrivers = (e: any, val: any) => {
+        setFilteredDrivers(val);
+    }
+
+    const handleFilterHours = (e: any, val: any) => {
+        setFilteredHours(val);
+    }
+
+    const handleChangeDriver = (event: any) => {
+        let currentDriver = testDrivers.find(driver => driver.id === event.target.value)
+        if (currentDriver) setCurrentDriver(currentDriver);
+    }
+
+    const handleChangeBus = (event: any) => {
+        let currentBus = testBuses.find(bus => bus.id === event.target.value)
+        if (currentBus) setCurrentDriver(currentBus);
+    }
+
+
 
     return (
         <div className='app_container'>
             <div className='schedul_filters'>
-                <select className='app__select' name="" id="">
-                    <option value=""  disabled>FILTER 1</option>
-                </select>
-                <select className='app__select' name="" id="">
-                    <option value=""  disabled>FILTER 1</option>
-                </select>
+                <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="tags-standard"
+                    options={testDrivers}
+                    getOptionLabel={(option) => `${option.name} - ${option.id}`}
+                    defaultValue={[testDrivers[0]]}
+                    value={filteredDrivers}
+                    onChange={(e, val) => handleFilterDrivers(e, val)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            label="Выбор водителей"
+                            placeholder="Водители"
+                        />
+                    )}
+                />
+                <Autocomplete
+                    multiple
+                    limitTags={2}
+                    id="tags-standard"
+                    options={filteredHours}
+                    getOptionLabel={(option) => option}
+                    value={filteredHours}
+                    onChange={(e, val) => handleFilterHours(e, val)}
+                    renderInput={(params) => (
+                        <TextField
+                            {...params}
+                            variant="standard"
+                            label="Выбор рабочих часов"
+                            placeholder="Часы"
+                        />
+                    )}
+                />
                 <select className='app__select' name="" id="">
                     <option value=""  disabled>FILTER 1</option>
                 </select>
@@ -95,7 +157,7 @@ function TimeSheet(props: any) {
                             <th>Табельный №</th>
                             <th className='workhour__cell'>
                                 {
-                                    workHours.map(hour => {
+                                    filteredHours.map((hour: any) => {
                                         return <p>{hour}</p>
                                     })
                                 }
@@ -103,7 +165,7 @@ function TimeSheet(props: any) {
                             </thead>
                             <tbody>
                             {
-                                testDrivers.map((driver, index) => {
+                                filteredDrivers.map((driver: any, index: number) => {
                                     let currentDriverRaces = testTimesheets.filter(race => race.driverId === driver.id)
                                     return <tr key={driver.id}>
                                         <td>{index + 1}</td>
@@ -112,12 +174,12 @@ function TimeSheet(props: any) {
                                         <td>
                                             {
                                                 currentDriverRaces.length
-                                                    ? <div style={{position: 'relative'}}>
+                                                    ? <div className='trip_cell'>
                                                         {
                                                             currentDriverRaces.map(trip => {
                                                                 let currentBus = testBuses.find(bus => bus.id === trip.busId),
                                                                     currentRace = testRaces.find(race => race.id === trip.raceId)
-                                                                return <div className={classes[trip.type]} style={{position: "absolute", top: -18, fontSize: '0.7em', left: `${(currentRace!.startTime - 6) * 52}px   `, width: `${(currentRace!.finishTime  - currentRace!.startTime) * 55}px`}}>
+                                                                return <div className={trip.type + ' ' + 'trip'} style={{left: `${(currentRace!.startTime - 6) * 52}px   `, width: `${(currentRace!.finishTime  - currentRace!.startTime) * 55}px`}}>
                                                                    <Tooltip title='Подробнее' onClick={() =>handleOpenDialog(trip)}>
                                                                        <p>{currentBus?.number}</p>
                                                                    </Tooltip>
@@ -148,32 +210,64 @@ function TimeSheet(props: any) {
             {
                 isOpenDialog
                     ? <BootstrapDialog
+                        className={openTrip.type}
                         onClose={handleClose}
                         aria-labelledby="customized-dialog-title"
                         open={isOpenDialog}
                     >
-                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-                            Modal title
+                        <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose} style={{width: 600}}>
+                            Рейс - №{openTrip.raceId}
                         </BootstrapDialogTitle>
-                        <DialogContent dividers>
+                        <DialogContent dividers style={{display: 'flex', flexDirection: 'column'}}>
                             <Typography gutterBottom>
-                                Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                                dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                                consectetur ac, vestibulum at eros.
+                                Отъезд: {testRaces.find(race => race.id === openTrip.raceId)!.startTime} | {testRaces.find(race => race.id === openTrip.raceId)!.startTarget} <br/>
+                                Приезд: {testRaces.find(race => race.id === openTrip.raceId)!.finishTime} | {testRaces.find(race => race.id === openTrip.raceId)!.finishTarget}
                             </Typography>
-                            <Typography gutterBottom>
-                                Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
-                                Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.
-                            </Typography>
-                            <Typography gutterBottom>
-                                Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus
-                                magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec
-                                ullamcorper nulla non metus auctor fringilla.
-                            </Typography>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-standard-label">Водитель</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    value={openTrip.driverId}
+                                    onChange={handleChangeDriver}
+                                    label="Age"
+                                >
+                                    {
+                                        testDrivers.length
+                                            ? testDrivers.map(driver => {
+                                                return <MenuItem value={driver.id}>
+                                                    {driver.name}
+                                                </MenuItem>
+                                            })
+                                            : null
+                                    }
+                                </Select>
+                            </FormControl>
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <InputLabel id="demo-simple-select-standard-label">Автобус</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-standard-label"
+                                    id="demo-simple-select-standard"
+                                    value={openTrip.busId}
+                                    onChange={handleChangeBus}
+                                    label="Age"
+                                >
+                                    {
+                                        testBuses.length
+                                            ? testBuses.map(bus => {
+                                                return <MenuItem value={bus.id}>
+                                                    {bus.number}
+                                                </MenuItem>
+                                            })
+                                            : null
+                                    }
+                                </Select>
+                            </FormControl>
+
                         </DialogContent>
                         <DialogActions>
                             <Button autoFocus onClick={handleClose}>
-                                Save changes
+                                СОХРАНИТЬ ИЗМЕНЕНИЯ
                             </Button>
                         </DialogActions>
                     </BootstrapDialog>

@@ -2,12 +2,20 @@
     display: flex;
     column-gap: 40px;
 }
+.trip_cell {
+    position: relative;
+}
+.trip {
+    position: absolute;
+    top: -18px;
+    font-size: 0.7em;
+}
 .long  {
-    backgroundColor: 'red',
+    background-color: red;
 }
 .short {
-    backgroundColor:  'yellow',
+    background-color:  yellow;
 }
 .bigBus {
-    backgroundColor: 'green',
+    background-color: green;
 }

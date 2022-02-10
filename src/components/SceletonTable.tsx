@@ -30,7 +30,7 @@ function SceletonTable(props: any) {
 
     return (
 
-            <table className='app_table' style={{width: '100%'}}>
+            <table className='app_table'>
                 <tbody>
                     <tr key='-1'>
                         {
