@@ -4,7 +4,10 @@ import '../App.css'
 import '../reset.css'
 import '../styles/timeSheets.css'
 import SceletonTable from "./SceletonTable";
-import {dateOptions, racesTypes, testChangeRequest, workHours} from "../common/models";
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import {dateOptions, racesTypes, testChangeRequest, testChengedRaces, workHours} from "../common/models";
 import {
     Autocomplete,
     Button,
@@ -68,7 +71,10 @@ function DriverChangeList(props: any) {
     const [filteredDrivers, setFilteredDrivers] = useState<any>(testDrivers)
     const [filteredHours, setFilteredHours] = useState<any>(workHours);
     const [allStartRequestDates, setAllStartRequestDates] = useState<any>([]);
-    const [allFinishRequestDates, setAllFinishRequestDates] = useState<any>([]);
+    const [maxFinishRequestDates, setMaxFinishRequestDates] = useState<any>(0);
+    const [maxStartRequestDates, setMaxStartRequestDates] = useState<any>(0);
+    const [selectedStartDay, setSelectedStartDay]  = useState<any>(0);
+    const [selectedFinishDay, setSelectedFinishDay]  = useState<any>(0);
 
 
     useEffect(() => {
@@ -127,8 +133,20 @@ function DriverChangeList(props: any) {
         startDate.forEach(item => {
             startDateArr.push(item);
         })
+        setSelectedStartDay(Number(minStartDate));
+        setSelectedFinishDay(Number(finishDate));
+        setMaxFinishRequestDates(Number(finishDate));
+        setMaxStartRequestDates(Number(minStartDate));
         setAllStartRequestDates(startDateArr);
     }, [testChangeRequest])
+
+    const handleSelectStart = (e: any) => {
+        if (e.target.value) setSelectedStartDay(Number(e.target.value));
+    }
+
+    const handleChangeFinishDay = (e: any) => {
+        setSelectedFinishDay(Date.parse(e.target.value));
+    }
 
     return (
         <div className='app_container'>
@@ -168,7 +186,7 @@ function DriverChangeList(props: any) {
                         />
                     )}
                 />
-                <select className='app__select' name="" id="">
+                <select className='app__select' value={selectedStartDay} name="" id="" onChange={handleSelectStart}>
                     <option value="" selected disabled>Начальная дата</option>
                     {
                         allStartRequestDates?.length
@@ -179,6 +197,21 @@ function DriverChangeList(props: any) {
                             : null
                     }
                 </select>
+                {/*<LocalizationProvider dateAdapter={AdapterDateFns}>*/}
+                {/*    <DesktopDatePicker*/}
+                {/*        label="Конечная дата"*/}
+                {/*        inputFormat="MM/dd/yyyy"*/}
+                {/*        value={selectedFinishDay}*/}
+                {/*        onChange={handleChangeFinishDay}*/}
+                {/*        renderInput={(params: any) => <TextField {...params} />}*/}
+                {/*    />*/}
+                {/*</LocalizationProvider>*/}
+                <input style={{border: 'none',borderRadius: '4px'}}
+                        type="date"
+                       value={selectedFinishDay}
+                       min={maxStartRequestDates ? new Date(maxStartRequestDates).toISOString().split('T')[0] : ''}
+                       max={maxFinishRequestDates ? new Date(maxFinishRequestDates).toISOString().split('T')[0] : ''}
+                       onChange={handleChangeFinishDay}/>
             </div>
 
             <div className='schedul_table_wrapper'>
@@ -193,14 +226,15 @@ function DriverChangeList(props: any) {
                             <th>
                                 Конец отгула
                             </th>
-                            <th style={{padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', borderLeft: 'none', borderRight: 'none', borderBottom:'none'}}>
-                                <tr>
+                            <th style={{padding: 0, borderLeft: 'none', borderRight: 'none'}}>
+                                <tr style={{display: 'flex'}}>
                                     <th className='noneBorderTRBL' style={{margin: '0 auto', display: 'block'}}  colSpan={3}>Данные о замене</th>
                                 </tr>
                                 <tr style={{width: '100%'}}>
-                                    <th  style={{width: '160px', borderRight: 'none', borderLeft: 'none'}}>Рейс</th>
-                                    <th  style={{width: 110, borderRight: 'none'}}>Автобус</th>
-                                    <th style={{borderRight: 'none'}}>Время отъезда</th>
+                                    <th  style={{width: 203, borderRight: 'none', borderLeft: 'none', borderBottom: 'none', fontSize: '0.7em'}}>Рейс</th>
+                                    <th  style={{width: 114, borderRight: 'none', borderBottom: 'none', fontSize: '0.7em'}}>Автобус</th>
+                                    <th style={{borderRight: 'none', borderBottom: 'none', fontSize: '0.7em', padding: 0, width: 45}}>Время отъезда</th>
+                                    <th style={{borderRight: 'none', borderBottom: 'none', fontSize: '0.7em', width: 69}}>Замена</th>
                                 </tr>
                             </th>
                             <th>Подобрать водителей</th>
@@ -210,7 +244,9 @@ function DriverChangeList(props: any) {
                                 filteredDrivers.map((driver: any, index: number) => {
                                     let currentDriverRequests = testChangeRequest.find(request => request.driverId === driver.id)!;
 
-                                    if (currentDriverRequests) {
+                                    if (currentDriverRequests &&
+                                        selectedStartDay && selectedStartDay <= currentDriverRequests.startTime &&
+                                        selectedFinishDay && selectedFinishDay >= currentDriverRequests.finishTime) {
 
                                         return <tr key={driver.id}>
                                             <td>{index + 1}</td>
@@ -218,20 +254,26 @@ function DriverChangeList(props: any) {
                                             <td>{driver.id}</td>
                                             <td>{new Date(currentDriverRequests.startTime).toLocaleString("ru", dateOptions)}</td>
                                             <td>{new Date(currentDriverRequests.finishTime).toLocaleString("ru", dateOptions)}</td>
-                                            <td style={{display: 'flex', padding: 0, flexDirection: 'column', alignItems: 'center', borderRight: 'none', borderLeft: 'none', borderTop: 'none'}}>
+                                            <td style={{ padding: 0, borderRight: 'none', borderLeft: 'none', borderTop: 'none'}}>
                                                 {
                                                     currentDriverRequests.timeSheets.map((timeSheetId, i, arr) => {
                                                         let timeSheetTrip = testTimesheets.find(trip => trip.id === timeSheetId)!
                                                         if (timeSheetTrip) return <tr className='tripDataTr' style={{width: '100%'}}>
-                                                            <td className='noneBorderTRL' style={{width: 158}} >
+                                                            <td style={{width: 160,}} className='noneBorderTRL' >
                                                                 {testRaces.find(race => race.id === timeSheetTrip.raceId)?.startTarget} -
                                                                 {testRaces.find(race => race.id === timeSheetTrip.raceId)?.finishTarget} -
                                                             </td>
-                                                            <td style={{borderTop: 'none', width: 110}} >
+                                                            <td style={{borderTop: 'none', width: 100}} >
                                                                 {testBuses.find(bus => bus.id === timeSheetTrip.busId)?.number}
                                                             </td>
-                                                            <td style={{borderTop: 'none', borderRight: 'none', width: 83}} >
+                                                            <td style={{borderTop: 'none', borderRight: 'none', width: 48 }} >
                                                                 {testRaces.find(race => race.id === timeSheetTrip.raceId)?.startTime}
+                                                            </td>
+                                                            <td style={{borderTop: 'none', borderRight: 'none', padding: 0, fontSize: '0.6em'}}>
+                                                                {
+                                                                    testDrivers.find(driver => driver.id ===
+                                                                        testChengedRaces.find(race => race.shouldChangeId.raceId === currentDriverRequests.id &&  race.shouldChangeId.timeSheetId === timeSheetId)?.driverId)?.name
+                                                                }
                                                             </td>
                                                         </tr>
                                                     })

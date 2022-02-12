@@ -102,16 +102,38 @@ export const testDrivers = [
 ]
 export const testChangeRequest = [
     {
+        id: 111,
         driverId: 125696,
         startTime: 1644514148514,
         finishTime: 1644814148514,
-        timeSheets: [111,222]
+        timeSheets: [111,222],
+        chagedId: [111, 333],
     },
     {
+        id: 222,
         driverId: 125958,
         startTime: 1644514148514,
         finishTime: 1644534148514,
-        timeSheets: [333]
+        timeSheets: [333],
+        chagedId: [222],
+    }
+]
+
+export const testChengedRaces = [
+    {
+        id: 111,
+        driverId: 125696,
+        shouldChangeId: {raceId: 111, timeSheetId: 111}, //race id: timeSheets[i]
+    },
+    {
+        id: 222,
+        driverId: 125958,
+        shouldChangeId: {raceId: 111, timeSheetId: 222},
+    },
+    {
+        id: 333,
+        driverId: 125697,
+        shouldChangeId: {raceId: 222, timeSheetId: 333},
     }
 ]
 

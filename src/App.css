@@ -42,7 +42,7 @@ body {
   border: 1.7px solid #6123F0;
 }
 .app_table td {
-  padding: 5px 8px;
+  /*padding: 5px 8px;*/
 }
 .app__load_more {
   padding: 4px 25px;
