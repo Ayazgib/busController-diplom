@@ -15,7 +15,7 @@ function Header() {
                 <NavLink to={PagesLink.timesheet} >
                     ГРАФИК
                 </NavLink> <b style={{color: '#CEBBFB'}}>/</b>
-                <NavLink to={PagesLink.request} >
+                <NavLink to={PagesLink.change_driver} >
                     ЗАЯВКИ
                 </NavLink> <b style={{color: '#CEBBFB'}}>/</b>
                 <NavLink to={PagesLink.docs} className='header__nav-last-child'>

@@ -53,6 +53,7 @@ function Schedule(props: any) {
                             <th>Рейс</th>
                             <th>Время отправления</th>
                             <th>Время прибытия</th>
+                            <th>Водитель <br/> (ФИО/ТН)</th>
                             <th>Автобус</th>
                             <th>Количество мест</th>
                             <th>Остановки</th>
@@ -63,6 +64,7 @@ function Schedule(props: any) {
                                 <td>Балтаси - <br/> Казань (Экспресс)</td>
                                 <td>8:00</td>
                                 <td>9:45</td>
+                                <td>Bdfyjd Bdfy Bdfysx 16455</td>
                                 <td>Hundai (Е453РЕ116)</td>
                                 <td>11/18</td>
                                 <td>
@@ -77,6 +79,7 @@ function Schedule(props: any) {
                                 <td>Казань - <br/> Балтаси(Экспресс)</td>
                                 <td>8:00</td>
                                 <td>9:45</td>
+                                <td>Bdfyjd Bdfy Bdfysx 16455</td>
                                 <td>Hundai (Е453РЕ116)</td>
                                 <td>11/18</td>
                                 <td>

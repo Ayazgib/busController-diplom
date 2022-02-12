@@ -3,11 +3,22 @@ export enum PagesLink {
     auth = '/Authorization',
     schedule = '/schedule',
     timesheet = '/timesheet',
-    request = '/request',
+    change_driver = '/change_driver',
     docs = '/docs'
 }
 
 export const workHours = [6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+
+export const dateOptions: any =   {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    /*weekday: 'long',
+    timezone: 'UTC',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'*/
+};
 
 export enum racesTypes {
     long = 'long',
@@ -17,18 +28,21 @@ export enum racesTypes {
 
 export const testTimesheets = [
     {
+        id: 111,
         driverId: 125696,
         raceId: 111,
         busId: 222,
         type: racesTypes.long
     },
     {
+        id: 222,
         driverId: 125696,
         raceId: 222,
         busId: 333,
         type: racesTypes.bigBus
     },
     {
+        id: 333,
         driverId: 125696,
         raceId: 333,
         busId: 444,
@@ -84,6 +98,20 @@ export const testDrivers = [
     {
         id: 125697,
         name: 'Васильев Василий Васильевич'
+    }
+]
+export const testChangeRequest = [
+    {
+        driverId: 125696,
+        startTime: 1644514148514,
+        finishTime: 1644814148514,
+        timeSheets: [111,222]
+    },
+    {
+        driverId: 125958,
+        startTime: 1644514148514,
+        finishTime: 1644534148514,
+        timeSheets: [333]
     }
 ]
 

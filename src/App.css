@@ -60,3 +60,30 @@ body {
   border: 2.5px solid #fff;
   color: #fff;
 }
+.noneBorderTRBL {
+  border-bottom: none !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+.noneBorderTRL {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+.noneBorderRBL {
+  border-bottom: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+.noneBorderRB {
+  border-bottom: none !important;
+  border-right: none !important;
+}
+.noneBorderTB {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+.tripDataTr:last-child td {
+  border-bottom: none;
+}
